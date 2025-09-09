@@ -1,11 +1,18 @@
 package pe.edu.upeu.asistencia.control;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import pe.edu.upeu.asistencia.enums.Carrera;
 import pe.edu.upeu.asistencia.enums.TipoParticipante;
+import pe.edu.upeu.asistencia.modelo.Participante;
+import pe.edu.upeu.asistencia.servicio.ParticipanteServicioI;
 
 @Controller
 public class ParticipanteController {
@@ -17,8 +24,35 @@ public class ParticipanteController {
     private ComboBox<TipoParticipante> cbxTipoParticipante;
 
     @FXML
+    TableView<Participante> tableView;
+    ObservableList<Participante> participantes;
+    TableColumn<Participante, String> dniCol, nombrecol, apellidoCol, carreraCol, tipoPartCol;
+
+    @Autowired
+    ParticipanteServicioI ps;
+
+    @FXML
     public void initialize(){
         cbxCarrera.getItems().setAll(Carrera.values());
         cbxTipoParticipante.getItems().setAll(TipoParticipante.values());
+
+        definirNobresComlumnas();
+        listarParticipantes();
+    }
+    public void definirNobresComlumnas(){
+        dniCol = new TableColumn("DNI");
+        nombrecol = new TableColumn("Nombre");
+        apellidoCol = new TableColumn("Apellido");
+        apellidoCol.setMinWidth(200);
+        carreraCol = new TableColumn("Carrera");
+        tipoPartCol = new TableColumn("Tipo Participante");
+        tipoPartCol.setMinWidth(160);
+        tableView.getColumns().addAll(dniCol, nombrecol, apellidoCol, carreraCol, tipoPartCol);
+    }
+    public void listarParticipantes(){
+        dniCol.setCellValueFactory(cellData -> cellData.getValue().getDni());
+        participantes=FXCollections.observableArrayList(ps.findAll());
+        tableView.setItems(participantes);
+
     }
 }
