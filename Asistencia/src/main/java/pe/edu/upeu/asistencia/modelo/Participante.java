@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pe.edu.upeu.asistencia.enums.Carrera;
+import pe.edu.upeu.asistencia.enums.TipoParticipante;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +16,8 @@ public class Participante {
     private StringProperty nombre;
     private StringProperty apellidos;
     private Carrera carrera;
+    private TipoParticipante tipoParticipante;
     private BooleanProperty estado;
+
 
 }
